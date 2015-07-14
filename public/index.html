@@ -20,8 +20,11 @@
     #button {
         position: fixed;
         z-index: 100;
-        top: 50%;
-        right: 50%;
+        height: 90%;
+        width: 40%;
+        top: 5%;
+        right: 5%;
+        font-size: 18pt;
     }
 </style>
 </head>
@@ -38,21 +41,27 @@
 
 <div id="editor2"></div>
 
-<button id="button" onClick="translateToElm()">Compile</button>
+<button id="button" onClick="translateToElm()">Generate Elm code</button>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor1");
     editor.getSession().setMode("ace/mode/html");
+    editor.on('change', function() {
+        elmEditor.setValue("");
+        button.style.visibility = 'visible';
+    });
 
     var elmEditor = ace.edit("editor2");
     elmEditor.setTheme("ace/theme/monokai");
     elmEditor.getSession().setMode("ace/mode/elm");
 
+    var button = document.getElementById('button');
+
     function translateToElm() {
-        elmEditor.setValue("");
         function callback(req) {
             elmEditor.setValue(req.responseText);
+            button.style.visibility = 'hidden';
         }
         sendRequest('/compile',callback,editor.getValue());
     }
@@ -69,7 +78,6 @@ function sendRequest(url,callback,postData) {
     req.onreadystatechange = function () {
         if (req.readyState != 4) return;
         if (req.status != 200 && req.status != 304) {
-            alert(req.status);
             return;
         }
         callback(req);
