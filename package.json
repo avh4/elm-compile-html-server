@@ -9,6 +9,7 @@
   "author": "Aaron VonderHaar <gruen0aermel@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "elm-compile-html": "0.0.0",
     "express": "^4.13.1"
   }
 }
